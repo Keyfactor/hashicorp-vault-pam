@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31829.152
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hashicorp-vault-pam", "hashicorp-vault-pam\hashicorp-vault-pam.csproj", "{43CD0F36-3523-442C-A10E-6757D0FBA42A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{43CD0F36-3523-442C-A10E-6757D0FBA42A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43CD0F36-3523-442C-A10E-6757D0FBA42A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43CD0F36-3523-442C-A10E-6757D0FBA42A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43CD0F36-3523-442C-A10E-6757D0FBA42A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C2005FB2-5D94-46F4-9947-D91C2FA2D289}
+	EndGlobalSection
+EndGlobal
