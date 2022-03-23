@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Keyfactor.Logging;
 using Keyfactor.Platform.Extensions;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -26,13 +28,23 @@ namespace Keyfactor.Extensions.Pam.Hashicorp
 
         public string GetPassword(Dictionary<string, string> instanceParameters, Dictionary<string, string> initializationInfo)
         {
-            WebRequest req = WebRequest.Create($"{initializationInfo["Host"]}{initializationInfo["Path"]}/{instanceParameters["Secret"]}");
+            ILogger logger = LogHandler.GetClassLogger<VaultPAM>();
+            logger.LogDebug($"PAM Provider {Name} - beginning PAM credential retrieval operation.");
+
+            string host = initializationInfo["Host"];
+            string path = initializationInfo["Path"];
+            WebRequest req = WebRequest.Create($"{host}{path}/{instanceParameters["Secret"]}");
             req.Method = "GET";
             req.Headers.Add("X-Vault-Token", initializationInfo["Token"]);
             req.ContentType = "application/json";
+
+            logger.LogDebug($"PAM Provider {Name} - requesting secret located at {host}{path}");
             Stream responseStream = req.GetResponse().GetResponseStream();
+            logger.LogTrace($"PAM Provider {Name} - received response to secret request");
+
             Dictionary<string, string> response = JsonConvert.DeserializeObject<VaultResponseWrapper>(new StreamReader(responseStream).ReadToEnd()).data;
 
+            logger.LogDebug($"PAM Provider {Name} - returning secret from vault");
             return response[instanceParameters["Key"]];
         }
     }
