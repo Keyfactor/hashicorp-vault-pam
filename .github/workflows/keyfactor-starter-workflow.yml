@@ -11,7 +11,7 @@ jobs:
     with:
       release_version: ${{ needs.call-create-github-release-workflow.outputs.release_version }}
       release_url: ${{ needs.call-create-github-release-workflow.outputs.release_url }}
-      release_dir: hashicorp-vault-pam/bin/Release # output directory to upload as a release, relative to checkout workspace
+      release_dir: hashicorp-vault-pam/bin/Release/netstandard2.0 # output directory to upload as a release, relative to checkout workspace
 
   call-generate-readme-workflow:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
