@@ -1,5 +1,5 @@
 ### Configuring Parameters
-The following are the parameter names and a description of the values needed to configure the Beyond Trust Password Safe PAM Provider.
+The following are the parameter names and a description of the values needed to configure the Hashicorp Vault PAM Provider.
 
 | Initialization parameter | Description | Instance parameter | Description |
 | :---: | --- | :---: | --- |
