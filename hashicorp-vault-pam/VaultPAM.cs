@@ -16,6 +16,7 @@ using Keyfactor.Logging;
 using Keyfactor.Platform.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -31,25 +32,30 @@ namespace Keyfactor.Extensions.Pam.Hashicorp
             ILogger logger = LogHandler.GetClassLogger<VaultPAM>();
             logger.LogDebug($"PAM Provider {Name} - beginning PAM credential retrieval operation.");
 
-            string host = initializationInfo["Host"];
+            Uri host = new Uri(initializationInfo["Host"]);
             string path = initializationInfo["Path"];
-            WebRequest req = WebRequest.Create($"{host}{path}/{instanceParameters["Secret"]}");
+            UriBuilder uri = new UriBuilder(host)
+            {
+                Path = path
+            };
+            WebRequest req = WebRequest.Create($"{uri.Uri}/{instanceParameters["Secret"]}");
             req.Method = "GET";
             req.Headers.Add("X-Vault-Token", initializationInfo["Token"]);
             req.ContentType = "application/json";
 
-            logger.LogDebug($"PAM Provider {Name} - requesting secret located at {host}{path}");
+            logger.LogDebug($"PAM Provider {Name} - requesting secret located at {uri.Uri}");
             Stream responseStream = req.GetResponse().GetResponseStream();
             logger.LogTrace($"PAM Provider {Name} - received response to secret request");
 
-            Dictionary<string, string> response = JsonConvert.DeserializeObject<VaultResponseWrapper>(new StreamReader(responseStream).ReadToEnd()).data;
+            string strResponse = new StreamReader(responseStream).ReadToEnd();
+            Dictionary<string, Dictionary<string, string>> response = JsonConvert.DeserializeObject<VaultResponseWrapper>(strResponse).data;
 
             logger.LogDebug($"PAM Provider {Name} - returning secret from vault");
-            return response[instanceParameters["Key"]];
+            return response["data"][instanceParameters["Key"]];
         }
     }
     public class VaultResponseWrapper
     {
-        public Dictionary<string, string> data;
+        public Dictionary<string, Dictionary<string, string>> data;
     }
 }
