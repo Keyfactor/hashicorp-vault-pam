@@ -29,16 +29,16 @@ After the installation is run, the DLLs need to be installed to the correct loca
 Once the DLL has been copied to `WebAgentServices\bin`, edit the `web.config` located up one level in the `WebAgentServices` folder. You will need to add a new Unity entry as follows under `<container>`, next to other `<register>` tags.
 
 ```xml
-<register type="IPAMProvider" mapTo="Keyfactor.Extensions.PAMProviders.Hashicorp, hashicorp-vault-pam" name="Hashicorp-Vault" />
+<register type="IPAMProvider" mapTo="Keyfactor.Extensions.Pam.Hashicorp.VaultPAM, hashicorp-vault-pam" name="Hashicorp-Vault" />
 ```
 
 ##### Usage
 In order to use the PAM Provider, the provider's configuration must be set in the Keyfactor Platform. In the settings menu (upper right cog) you can select the ___Priviledged Access Management___ option to configure your provider instance.
 
-Pic 1
+![](images/pam-setting.png)
 
-Pic 2
+![](images/hashi-config.png)
 
 After it is set up, you can now use your PAM Provider when configuring certificate stores. Any field that is treated as a Keyfactor secret, such as server passwords and certificate store passwords can be retrieved from your PAM Provider instead of being entered in directly as a secret.
 
-Pic 3
+![](images/hashi-password.png)
