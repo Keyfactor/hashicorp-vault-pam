@@ -1,9 +1,9 @@
 name: Starter Workflow
-on: [workflow_dispatch, push, pull_request]
+on: [workflow_dispatch, pull_request, push]
 
 jobs:
   call-create-github-release-workflow:
-    uses: Keyfactor/actions/.github/workflows/github-release.yml@main
+    uses: Keyfactor/actions/.github/workflows/github-release.yml@testing-release
 
   call-dotnet-build-and-release-workflow:
     needs: [call-create-github-release-workflow]
@@ -11,7 +11,7 @@ jobs:
     with:
       release_version: ${{ needs.call-create-github-release-workflow.outputs.release_version }}
       release_url: ${{ needs.call-create-github-release-workflow.outputs.release_url }}
-      release_dir: hashicorp-vault-pam/bin/Release # output directory to upload as a release, relative to checkout workspace
+      release_dir: hashicorp-vault-pam/bin/Release/netstandard2.0 # output directory to upload as a release, relative to checkout workspace
     secrets: 
       token: ${{ secrets.PRIVATE_PACKAGE_ACCESS }}
 
