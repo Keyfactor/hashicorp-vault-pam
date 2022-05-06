@@ -36,13 +36,22 @@ After adding a secret object to `kv` with a key and value, you can use the objec
 ##### Installation
 In order to setup a new PAM Provider in the Keyfactor Platform for the first time, you will need to run [the SQL Installation Script]() against your Keyfactor application database.
 
-After the installation is run, the DLLs need to be installed to the correct location for the PAM Provider to function. From the release, the `hashicorp-vault-pam.dll` should be copied to the `WebAgentServices\bin` folder in the Keyfactor installation location.
+After the installation is run, the DLLs need to be installed to the correct location for the PAM Provider to function. From the release, the `hashicorp-vault-pam.dll` should be copied to the following folder locations in the Keyfactor installation. Once the DLL has been copied to these folders, edit the corresponding config file. You will need to add a new Unity entry as follows under `<container>`, next to other `<register>` tags.
 
-Once the DLL has been copied to `WebAgentServices\bin`, edit the `web.config` located up one level in the `WebAgentServices` folder. You will need to add a new Unity entry as follows under `<container>`, next to other `<register>` tags.
+When enabling a PAM provider for Orchestrators only, the first line for `WebAgentServices` is the only installation needed.
+
+The Keyfactor service and IIS Server should be restarted after making these changes.
 
 ```xml
 <register type="IPAMProvider" mapTo="Keyfactor.Extensions.Pam.Hashicorp.VaultPAM, hashicorp-vault-pam" name="Hashicorp-Vault" />
 ```
+
+| Install Location | DLL Binary Folder | Config File |
+| --- | --- | --- |
+| WebAgentServices | WebAgentServices\bin\ | WebAgentServices\web.config |
+| Service | Service\ | Service\CMSTimerService.exe.config |
+| KeyfactorAPI | KeyfactorAPI\bin\ | KeyfactorAPI\web.config |
+| WebConsole | WebConsole\bin\ | WebConsole\web.config |
 
 ##### Usage
 In order to use the PAM Provider, the provider's configuration must be set in the Keyfactor Platform. In the settings menu (upper right cog) you can select the ___Priviledged Access Management___ option to configure your provider instance.
