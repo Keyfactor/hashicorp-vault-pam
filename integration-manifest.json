@@ -2,7 +2,7 @@
   "$schema": "https://keyfactor.github.io/integration-manifest-schema.json",
   "integration_type": "pam",
   "name": "Hashicorp Vault PAM Provider",
-  "status": "prototype",
-  "link_github": false,
+  "status": "production",
+  "link_github": true,
   "description": "The Hashicorp Vault PAM Provider allows for the retrieval of stored account credentials from a Hashicorp Vault Secret store. A valid token with access to the secrets in the Vault is used to retrieve secrets from a specific secret path in the Vault."
 }
