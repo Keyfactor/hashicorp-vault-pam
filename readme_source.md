@@ -1,3 +1,6 @@
+#### Compatibility
+This release was tested against Hashicorp Vault version 1.9.4.
+
 ### Initial Configuration of PAM Provider
 In order to allow Keyfactor to use the new Hashicorp-Vault PAM Provider, the definition needs to be added to the application database.
 This is done by running the provided [add_PAMProvider.sql](./hashicorp-vault-pam/add_PAMProvider.sql) script on the Keyfactor application database, which only needs to be done one time.
