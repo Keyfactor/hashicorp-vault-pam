@@ -1,4 +1,5 @@
 #### Compatibility
+This release requires Keyfactor version 9.10 or greater.
 This release was tested against Hashicorp Vault version 1.9.4.
 
 ### Initial Configuration of PAM Provider
