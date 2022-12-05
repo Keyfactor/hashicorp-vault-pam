@@ -6,16 +6,21 @@ The Hashicorp Vault PAM Provider allows for the retrieval of stored account cred
 
 ## About the Keyfactor PAM Provider
 
-Keyfactor supports the retrieval of credentials from 3rd party Priviledged Access Management (PAM) solutions. Secret values can normally be stored, encrypted at rest, in the Keyfactor Platform database. A PAM Provider can allow these secrets to be stored, managed, and rotated in an external platform. This integration is usually configured on the Keyfactor Platform itself, where the platform can request the credential values when needed. In certain scenarios, a PAM Provider can instead be run on a remote location in conjunction with a Keyfactor Orchestrator to allow credential requests to originate from a location other than the Keyfactor Platform.
-
----
+Keyfactor supports the retrieval of credentials from 3rd party Privileged Access Management (PAM) solutions. Secret values can normally be stored, encrypted at rest, in the Keyfactor Platform database. A PAM Provider can allow these secrets to be stored, managed, and rotated in an external platform. This integration is usually configured on the Keyfactor Platform itself, where the platform can request the credential values when needed. In certain scenarios, a PAM Provider can instead be run on a remote location in conjunction with a Keyfactor Orchestrator to allow credential requests to originate from a location other than the Keyfactor Platform.
 
 
 
 
 ---
+
+
+
+
+---
+
 
 #### Compatibility
+This release requires Keyfactor version 9.10 or greater.
 This release was tested against Hashicorp Vault version 1.9.4.
 
 ### Initial Configuration of PAM Provider
