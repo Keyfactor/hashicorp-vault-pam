@@ -26,7 +26,7 @@ After adding a secret object to `kv` with a key and value, you can use the objec
 
 #### In Keyfactor - PAM Provider
 ##### Installation
-In order to setup a new PAM Provider in the Keyfactor Platform for the first time, you will need to run [the SQL Installation Script]() against your Keyfactor application database.
+In order to setup a new PAM Provider in the Keyfactor Platform for the first time, you will need to run [the SQL Installation Script](./hashicorp-vault-pam/add_PAMProvider.sql) against your Keyfactor application database.
 
 After the installation is run, the DLLs need to be installed to the correct location for the PAM Provider to function. From the release, the `hashicorp-vault-pam.dll` should be copied to the following folder locations in the Keyfactor installation. Once the DLL has been copied to these folders, edit the corresponding config file. You will need to add a new Unity entry as follows under `<container>`, next to other `<register>` tags.
 
