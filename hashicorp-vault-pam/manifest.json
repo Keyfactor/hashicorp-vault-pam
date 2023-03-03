@@ -1,0 +1,14 @@
+{
+  "extensions": {
+    "Keyfactor.Platform.Extensions.IPAMProvider": {
+      "PAMProviders.Hashicorp-Vault.PAMProvider": {
+        "assemblyPath": "hashicorp-vault-pam.dll",
+        "TypeFullName": "Keyfactor.Extensions.Pam.Hashicorp.VaultPAM"
+      }
+    }
+  },
+  "Keyfactor:PAMProviders:Hashicorp-Vault:InitializationInfo": {
+    "Host": "vault-hostname",
+    "Path": "secret-path"
+  }
+}
