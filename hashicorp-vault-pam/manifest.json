@@ -8,7 +8,8 @@
     }
   },
   "Keyfactor:PAMProviders:Hashicorp-Vault:InitializationInfo": {
-    "Host": "vault-hostname",
-    "Path": "secret-path"
+    "Host": "http://127.0.0.1:8200",
+    "Path": "v1/secret/data",
+    "Token": "xxxxxx"
   }
 }
