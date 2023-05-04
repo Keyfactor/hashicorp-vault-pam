@@ -30,9 +30,13 @@ Using this on a Universal Orchestrator requires UO version 10.1 or greater.
 
 ### Initial Configuration of PAM Provider
 In order to allow Keyfactor to use the new Hashicorp Vault PAM Provider, the definition needs to be added to the application database.
-This is done by running the provided [add_PAMProvider.sql](./add_PAMProvider.sql) script on the Keyfactor application database, which only needs to be done one time.
+This is done by running the provided `kfutil` tool to install the PAM definition, which only needs to be done one time. It uses API credentials to access the Keyfactor instance and create the PAM definition.
 
-If you have a hosted environment or need assistance completing this step, please contact Keyfactor Support.
+The `kfutil` tool, after being [configured for API access](https://github.com/Keyfactor/kfutil#quickstart), can be run in the following manner to install the PAM definition from the Keyfactor repository:
+
+```
+kfutil pam types-create -r hashicorp-vault-pam -n Hashicorp-Vault
+```
 
 ### Configuring Parameters
 The following are the parameter names and a description of the values needed to configure the Hashicorp Vault PAM Provider.
@@ -84,7 +88,7 @@ If a field supports PAM but should not use PAM, simply enter in the actual value
 
 #### In Keyfactor - PAM Provider
 ##### Installation
-In order to setup a new PAM Provider in the Keyfactor Platform for the first time, you will need to run [the SQL Installation Script](./add_PAMProvider.sql) against your Keyfactor application database.
+In order to setup a new PAM Provider in the Keyfactor Platform for the first time, you will need to run the `kfutil` tool (see Initial Configuration of PAM Provider).
 
 After the installation is run, the DLLs need to be installed to the correct location for the PAM Provider to function. From the release, the hashicorp-vault-pam.dll should be copied to the following folder locations in the Keyfactor installation. Once the DLL has been copied to these folders, edit the corresponding config file. You will need to add a new Unity entry as follows under `<container>`, next to other `<register>` tags.
 
