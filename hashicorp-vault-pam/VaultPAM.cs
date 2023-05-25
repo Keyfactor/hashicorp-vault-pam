@@ -30,32 +30,7 @@ namespace Keyfactor.Extensions.Pam.Hashicorp
         public string GetPassword(Dictionary<string, string> instanceParameters, Dictionary<string, string> initializationInfo)
         {
             ILogger logger = LogHandler.GetClassLogger<VaultPAM>();
-            logger.LogDebug($"PAM Provider {Name} - beginning PAM credential retrieval operation.");
-
-            Uri host = new Uri(initializationInfo["Host"]);
-            string path = initializationInfo["Path"];
-            UriBuilder uri = new UriBuilder(host)
-            {
-                Path = path
-            };
-            WebRequest req = WebRequest.Create($"{uri.Uri}/{instanceParameters["Secret"]}");
-            req.Method = "GET";
-            req.Headers.Add("X-Vault-Token", initializationInfo["Token"]);
-            req.ContentType = "application/json";
-
-            logger.LogDebug($"PAM Provider {Name} - requesting secret located at {uri.Uri}");
-            Stream responseStream = req.GetResponse().GetResponseStream();
-            logger.LogTrace($"PAM Provider {Name} - received response to secret request");
-
-            string strResponse = new StreamReader(responseStream).ReadToEnd();
-            Dictionary<string, Dictionary<string, string>> response = JsonConvert.DeserializeObject<VaultResponseWrapper>(strResponse).data;
-
-            logger.LogDebug($"PAM Provider {Name} - returning secret from vault");
-            return response["data"][instanceParameters["Key"]];
+            return VaultAPI.GetVaultValue(Name, instanceParameters, new Uri(initializationInfo["Host"]), initializationInfo["Path"], instanceParameters["Token"]);
         }
-    }
-    public class VaultResponseWrapper
-    {
-        public Dictionary<string, Dictionary<string, string>> data;
     }
 }
