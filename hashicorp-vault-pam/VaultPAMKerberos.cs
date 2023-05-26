@@ -23,15 +23,17 @@ using System.Net;
 
 namespace Keyfactor.Extensions.Pam.Hashicorp
 {
-    public class VaultPAM : IPAMProvider
+    public class VaultPAMKerberos : IPAMProvider
     {
         public string Name => "Hashicorp-Vault";
 
         public string GetPassword(Dictionary<string, string> instanceParameters, Dictionary<string, string> initializationInfo)
         {
-            ILogger logger = LogHandler.GetClassLogger<VaultPAM>();
+            ILogger logger = LogHandler.GetClassLogger<VaultPAMKerberos>();
             logger.MethodEntry(LogLevel.Trace);
-            return VaultAPI.GetVaultValue(Name, instanceParameters, new Uri(initializationInfo["Host"]), initializationInfo["Path"], instanceParameters["Token"]);
+            Uri host = new Uri(initializationInfo["Host"]);
+            string clientToken = VaultAPI.GetClientToken(host, Name);
+            return VaultAPI.GetVaultValue(Name, instanceParameters, host, initializationInfo["Path"], clientToken);
         }
     }
 }

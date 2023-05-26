@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 
 
 namespace Keyfactor.Extensions.Pam.Hashicorp
@@ -51,6 +52,33 @@ namespace Keyfactor.Extensions.Pam.Hashicorp
 
             logger.LogDebug($"PAM Provider {name} - returning secret from vault");
             return response["data"][instanceParameters["Key"]];
+        }
+
+        internal static string GetClientToken(Uri host, string name)
+        {
+            string path = "/v1/auth/kerberos/login";
+
+            ILogger logger = LogHandler.GetClassLogger<VaultAPI>();
+            logger.LogDebug($"PAM Provider {name} - beginning PAM client auth token kerberos retrieval operation.");
+
+            UriBuilder uri = new UriBuilder(host)
+            {
+                Path = path
+            };
+            WebRequest req = WebRequest.Create($"{uri.Uri}");
+            req.Method = "POST";
+            req.ContentType = "application/json";
+
+            logger.LogDebug($"PAM Provider {name} - requesting client auth token from kerberos authentication request at {uri.Uri}");
+            Stream responseStream = req.GetResponse().GetResponseStream();
+            logger.LogTrace($"PAM Provider {name} - received response to kerberos auth request");
+
+            string strResponse = new StreamReader(responseStream).ReadToEnd();
+            Dictionary<string, Dictionary<string, string>> response = JsonConvert.DeserializeObject<VaultResponseWrapper>(strResponse).data;
+
+            logger.LogDebug($"PAM Provider {name} - returning secret from vault");
+            return response["auth"]["client_token"];
+
         }
     }
     internal class VaultResponseWrapper
