@@ -31,7 +31,7 @@ namespace Keyfactor.Extensions.Pam.Hashicorp
         {
             ILogger logger = LogHandler.GetClassLogger<VaultPAM>();
             logger.MethodEntry(LogLevel.Trace);
-            return VaultAPI.GetVaultValue(Name, instanceParameters, new Uri(initializationInfo["Host"]), initializationInfo["Path"], instanceParameters["Token"]);
+            return VaultAPI.GetVaultValue(Name, instanceParameters, new Uri(initializationInfo["Host"]), initializationInfo["Path"], initializationInfo["Token"]);
         }
     }
 }
