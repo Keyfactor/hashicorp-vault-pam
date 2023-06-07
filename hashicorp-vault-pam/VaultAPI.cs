@@ -14,14 +14,12 @@
 
 using System;
 using Keyfactor.Logging;
-using Keyfactor.Platform.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Xml.Linq;
+using System.Net.Http;
 using Newtonsoft.Json.Linq;
 
 
@@ -56,29 +54,30 @@ namespace Keyfactor.Extensions.Pam.Hashicorp
 
         internal static string GetClientToken(Uri host, string name)
         {
-            string path = "/v1/auth/kerberos/login";
-
             ILogger logger = LogHandler.GetClassLogger<VaultAPI>();
             logger.LogDebug($"PAM Provider {name} - beginning PAM client auth token kerberos retrieval operation.");
 
-            UriBuilder uri = new UriBuilder(host)
+            var handler = new HttpClientHandler()
             {
-                Path = path
+                UseDefaultCredentials = true
             };
-            WebRequest req = WebRequest.Create($"{uri.Uri}");
-            req.Method = "POST";
-            req.ContentType = "application/json";
 
-            logger.LogDebug($"PAM Provider {name} - requesting client auth token from kerberos authentication request at {uri.Uri}");
-            Stream responseStream = req.GetResponse().GetResponseStream();
-            logger.LogTrace($"PAM Provider {name} - received response to kerberos auth request");
+            // Create an instance of HttpClient with the handler
+            using (var client = new HttpClient(handler))
+            {
+                string authEndpoint = "/v1/auth/kerberos/login";
 
-            string strResponse = new StreamReader(responseStream).ReadToEnd();
-            Dictionary<string, Dictionary<string, string>> response = JsonConvert.DeserializeObject<VaultResponseWrapper>(strResponse).data;
+                logger.LogDebug($"PAM Provider {name} - requesting client auth token from kerberos authentication request at {host}");
+                var kerberosResponse = client.PostAsync($"{host}{authEndpoint}", null).GetAwaiter().GetResult();
+                logger.LogTrace($"PAM Provider {name} - received response to kerberos auth request");
 
-            logger.LogDebug($"PAM Provider {name} - returning secret from vault");
-            return response["auth"]["client_token"];
+                kerberosResponse.EnsureSuccessStatusCode();
+                var kerberosContent = kerberosResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                JObject kerb = JObject.Parse(kerberosContent);
 
+                logger.LogDebug($"PAM Provider {name} - returning secret from vault");
+                return kerb["auth"].Value<string>("client_token");
+            }
         }
     }
     internal class VaultResponseWrapper
