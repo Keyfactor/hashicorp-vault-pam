@@ -65,7 +65,7 @@ namespace Keyfactor.Extensions.Pam.Hashicorp
             // Create an instance of HttpClient with the handler
             using (var client = new HttpClient(handler))
             {
-                string authEndpoint = "/v1/auth/kerberos/login";
+                string authEndpoint = "v1/auth/kerberos/login";
 
                 logger.LogDebug($"PAM Provider {name} - requesting client auth token from kerberos authentication request at {host}");
                 var kerberosResponse = client.PostAsync($"{host}{authEndpoint}", null).GetAwaiter().GetResult();
