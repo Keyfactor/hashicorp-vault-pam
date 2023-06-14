@@ -2,7 +2,7 @@ __Initialization Parameters for each defined PAM Provider instance__
 | Initialization parameter | Display Name | Description |
 | :---: | :---: | --- |
 | Host | Vault Host | The IP address or URL of the Vault instance, including any port number |
-| Token | Vault Token | The access token for the Vault |
+| Token* | Vault Token | The access token for the Vault  *For token auth only.  Not needed for Kerberos auth.|
 | Path | KV Engine Path | The path to secrets in the Vault. By default this would be at 'v1/secret/data' |
 
 
