@@ -1,0 +1,14 @@
+{
+  "extensions": {
+    "Keyfactor.Platform.Extensions.IPAMProvider": {
+      "PAMProviders.Hashicorp-Vault.PAMProvider": {
+        "assemblyPath": "hashicorp-vault-pam.dll",
+        "TypeFullName": "Keyfactor.Extensions.Pam.Hashicorp.VaultPAMKerberos"
+      }
+    }
+  },
+  "Keyfactor:PAMProviders:Hashicorp-Vault:InitializationInfo": {
+    "Host": "http://vaultservice.command.local:8200",
+    "Path": "v1/secret/data"
+  }
+}
