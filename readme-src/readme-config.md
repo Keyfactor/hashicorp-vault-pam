@@ -45,6 +45,7 @@ There is a considerable amount of set up that needs to be performed before kerbe
 7. Configure the Kerberos auth method to communicate with LDAP using the service account configured above - `vault write auth/kerberos/config/ldap binddn={ServiceAccount.FullyQualified.Domain} bindpass={ServiceAccountPassword} groupattr=sAMAccountName groupdn="DC={DomainNode},DC={DomainNode}" groupfilter="(&(objectClass=group)(member:1.2.840.113556.1.4.1941:={{'{{'}}.UserDN}}))" userdn="OU={OUValue},DC={DomainNode},DC={DomainNode}" userattr=sAMAccountName upnDomain={Domain.Value} url=ldap://{LDAP.Domain.Value}:389`
 8. Write the policy and capabilities to be assigned to an authenticated user - `vault policy write {VaultPolicyName} {c:\file\path\to\VaultPolicy.txt}` 
 9. Configure the Vault policy that should be granted to those who successfully authenticate based on their LDAP group membership - `vault write /auth/kerberos/groups/{LDAPGroup} policies={VaultPolicyName}`
-10. Set the spn for the Vault service account on AD - `setspn.exe -U -S HTTP/{VaultURL} {ServiceAccount}`
+10. Set the spn for the Vault service account on AD - `setspn.exe -U -S HTTP/{ServiceAccount.FullyQualified.Domain}:8200 {ServiceAccount}`
+11. To test whether Kerberos authentication is configured correctly, run `vault login -method=kerberos username={UserNameToAuthenticateWith} service=HTTP/{ServiceAccount.FullyQualified.Domain} realm={Domain} keytab_path={PathToKeytabCreatedInStep5} krb5conf_path=c:\ProgramData\MIT\Kerberos5\krb5.ini disable_fast_negotiation=true.  If the configuration is correct, you should see a "Success!" message after running this command.
 
 A more generic reference for the necessary configuration can be found at https://developer.hashicorp.com/vault/docs/auth/kerberos.
