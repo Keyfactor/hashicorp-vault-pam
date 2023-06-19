@@ -1,4 +1,4 @@
-﻿// Copyright 2022 Keyfactor
+﻿// Copyright 2023 Keyfactor
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ namespace Keyfactor.Extensions.Pam.Hashicorp
                 var kerberosContent = kerberosResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 JObject kerb = JObject.Parse(kerberosContent);
 
-                logger.LogDebug($"PAM Provider {name} - returning secret from vault");
+                logger.LogDebug($"PAM Provider {name} - returning client token from vault");
                 return kerb["auth"].Value<string>("client_token");
             }
         }
