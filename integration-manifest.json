@@ -3,8 +3,11 @@
   "integration_type": "pam",
   "name": "Hashicorp Vault PAM Provider",
   "status": "production",
-  "support_level": "kf-supported",
   "link_github": true,
+<<<<<<< Updated upstream
+  "description": "The Hashicorp Vault PAM Provider allows for the retrieval of stored account credentials from a Hashicorp Vault Secret store. A valid token with access to the secrets in the Vault is used to retrieve secrets from a specific secret path in the Vault."
+=======
+  "release_dir": "hashicorp-vault-pam/bin/Release/netstandard2.0",
   "description": "The Hashicorp Vault PAM Provider allows for the retrieval of stored account credentials from a Hashicorp Vault Secret store. A valid token with access to the secrets in the Vault is used to retrieve secrets from a specific secret path in the Vault.",
   "about": {
     "pam": {
@@ -16,39 +19,40 @@
         "Hashicorp-Vault": {
           "Name": "Hashicorp-Vault",
           "Parameters": [
-              {
-                  "Name": "Host",
-                  "DisplayName": "Vault Host",
-                  "DataType": 1,
-                  "InstanceLevel": false
-              },
-              {
-                  "Name": "Token",
-                  "DisplayName": "Vault Token",
-                  "DataType": 2,
-                  "InstanceLevel": false
-              },
-              {
-                  "Name": "Path",
-                  "DisplayName": "KV Engine Path",
-                  "DataType": 1,
-                  "InstanceLevel": false
-              },
-              {
-                  "Name": "Secret",
-                  "DisplayName": "KV Secret Name",
-                  "DataType": 1,
-                  "InstanceLevel": true
-              },
-              {
-                  "Name": "Key",
-                  "DisplayName": "KV Secret Key",
-                  "DataType": 1,
-                  "InstanceLevel": true
-              }
+            {
+              "Name": "Host",
+              "DisplayName": "Vault Host",
+              "DataType": 1,
+              "InstanceLevel": false
+            },
+            {
+              "Name": "Token",
+              "DisplayName": "Vault Token",
+              "DataType": 2,
+              "InstanceLevel": false
+            },
+            {
+              "Name": "Path",
+              "DisplayName": "KV Engine Path",
+              "DataType": 1,
+              "InstanceLevel": false
+            },
+            {
+              "Name": "Secret",
+              "DisplayName": "KV Secret Name",
+              "DataType": 1,
+              "InstanceLevel": true
+            },
+            {
+              "Name": "Key",
+              "DisplayName": "KV Secret Key",
+              "DataType": 1,
+              "InstanceLevel": true
+            }
           ]
-      }
+        }
       }
     }
   }
+>>>>>>> Stashed changes
 }
