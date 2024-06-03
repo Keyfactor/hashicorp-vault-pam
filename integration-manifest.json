@@ -4,6 +4,7 @@
   "name": "Hashicorp Vault PAM Provider",
   "status": "production",
   "support_level": "kf-supported",
+  "update_catalog": true,
   "link_github": true,
   "release_dir": "hashicorp-vault-pam/bin/Release/netstandard2.0",
   "description": "The Hashicorp Vault PAM Provider allows for the retrieval of stored account credentials from a Hashicorp Vault Secret store. A valid token with access to the secrets in the Vault is used to retrieve secrets from a specific secret path in the Vault.",
