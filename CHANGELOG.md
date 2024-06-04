@@ -1,3 +1,6 @@
+v1.2.1
+- Add additional <register> snippet is included when installing on KF Command 10- which requires registering the PAM Provider in a web.config.
+
 v1.2.0
 - Added Kerberos authentication capabilities
 
