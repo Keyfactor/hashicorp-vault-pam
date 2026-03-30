@@ -2,11 +2,6 @@
 
 The Hashicorp Vault PAM Provider allows for the retrieval of stored account credentials from a Hashicorp Vault Secret store. A valid token with access to the secrets in the Vault is used to retrieve secrets from a specific secret path in the Vault.
 
-## Requirements
-This release requires Keyfactor version 9.10 or greater.
-This release was tested against Hashicorp Vault version 1.9.4.
-Using this on a Universal Orchestrator requires UO version 10.1 or greater.
-
 ## Installation and Configuration
 #### In Hashicorp Vault
 When configuring the Hashicorp Vault for use as a PAM Provider with Keyfactor, you will need to set up and configure the `kv` functionality in Vault. You will need an API Key that has the right permissions. The default `secret` location can be used, or another location.
