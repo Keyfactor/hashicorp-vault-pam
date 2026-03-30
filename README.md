@@ -177,13 +177,96 @@ Below is the payload to `POST` to the Keyfactor Command API
 #### Install PAM provider on Keyfactor Command Host (Local)
 
 
-("TODO Platform Install is an optional section. If this section doesn't seem necessary on initial glance, please delete it. Refer to the docs on [Confluence](https://keyfactor.atlassian.net/wiki/x/SAAyHg) for more info",)
+
+1. On the server that hosts Keyfactor Command, download and unzip the latest release of the Hashicorp Vault PAM Provider from the [Releases](../../releases) page.
+
+2. Copy the assemblies to the appropriate directories on the Keyfactor Command server:
+
+    <details><summary>Keyfactor Command 11+</summary>
+
+    1. Copy the unzipped assemblies to each of the following directories:
+
+        * `C:\Program Files\Keyfactor\Keyfactor Platform\WebAgentServices\Extensions\hashicorp-vault-pam`
+        * `C:\Program Files\Keyfactor\Keyfactor Platform\WebConsole\Extensions\hashicorp-vault-pam`
+        * `C:\Program Files\Keyfactor\Keyfactor Platform\KeyfactorAPI\Extensions\hashicorp-vault-pam`
+
+    </details>
+
+    <details><summary>Keyfactor Command 10</summary>
+
+    1. Copy the assemblies to each of the following directories:
+    
+        * `C:\Program Files\Keyfactor\Keyfactor Platform\WebAgentServices\bin\hashicorp-vault-pam`
+        * `C:\Program Files\Keyfactor\Keyfactor Platform\KeyfactorAPI\bin\hashicorp-vault-pam`
+        * `C:\Program Files\Keyfactor\Keyfactor Platform\WebConsole\bin\hashicorp-vault-pam`
+        * `C:\Program Files\Keyfactor\Keyfactor Platform\Service\hashicorp-vault-pam`
+
+    2. Open a text editor on the Keyfactor Command server as an administrator and open the `web.config` file located in the `WebAgentServices` directory.
+
+    3. In the `web.config` file, locate the `<container> </container>` section and add the following registration:
+
+        ```xml
+        <container>
+            ...
+            <!--The following are PAM Provider registrations. Uncomment them to use them in the Keyfactor Product:-->
+            
+            <!--Add the following line exactly to register the PAM Provider-->
+            <register type="IPAMProvider" mapTo="Keyfactor.Extensions.Pam.Hashicorp.VaultPAM, Keyfactor.Command.PAMProviders" name="Hashicorp-Vault" />
+        </container>
+        ```
+
+    4. Repeat steps 2 and 3 for each of the directories listed in step 1. The configuration files are located in the following paths by default:
+
+        * `C:\Program Files\Keyfactor\Keyfactor Platform\WebAgentServices\web.config`
+        * `C:\Program Files\Keyfactor\Keyfactor Platform\KeyfactorAPI\web.config`
+        * `C:\Program Files\Keyfactor\Keyfactor Platform\WebConsole\web.config`
+        * `C:\Program Files\Keyfactor\Keyfactor Platform\Service\CMSTimerService.exe.config`
+
+    </details>
+
+3. Restart the Keyfactor Command services (`iisreset`).
+
+
 
 
 #### Install PAM provider on a Universal Orchestrator Host (Remote)
 
 
-("TODO Orchestrator Install is an optional section. If this section doesn't seem necessary on initial glance, please delete it. Refer to the docs on [Confluence](https://keyfactor.atlassian.net/wiki/x/SAAyHg) for more info",)
+1. Install the Hashicorp Vault PAM Provider assemblies.
+
+    * **Using kfutil**: On the server that that hosts the Universal Orchestrator, run the following command:
+
+        ```shell
+        # Windows Server
+        kfutil orchestrator extension -e hashicorp-vault-pam@latest --out "C:\Program Files\Keyfactor\Keyfactor Orchestrator\extensions"
+
+        # Linux
+        kfutil orchestrator extension -e hashicorp-vault-pam@latest --out "/opt/keyfactor/orchestrator/extensions"
+        ```
+
+    * **Manually**: Download the latest release of the Hashicorp Vault PAM Provider from the [Releases](../../releases) page. Extract the contents of the archive to:
+
+        * **Windows Server**: `C:\Program Files\Keyfactor\Keyfactor Orchestrator\extensions\hashicorp-vault-pam`
+        * **Linux**: `/opt/keyfactor/orchestrator/extensions/hashicorp-vault-pam`
+
+2. Included in the release is a `manifest.json` file that contains the following object:
+    ```json
+
+    {
+        "Keyfactor:PAMProviders:Hashicorp-Vault:InitializationInfo": {
+            "Host": "http://127.0.0.1:8200",
+            "Path": "v1/secret/data",
+            "Token": "xxxxxx"
+        }
+    }
+
+    ```
+
+    Populate the fields in this object with credentials and configuration data collected in the [requirements](docs/hashicorp-vault.md#requirements) section.
+
+3. Restart the Universal Orchestrator service.
+
+
 
 
 
@@ -201,13 +284,93 @@ Below is the payload to `POST` to the Keyfactor Command API
 #### From Keyfactor Command Host (Local)
 
 
-("TODO Platform Usage is an optional section. If this section doesn't seem necessary on initial glance, please delete it. Refer to the docs on [Confluence](https://keyfactor.atlassian.net/wiki/x/SAAyHg) for more info",)
+
+##### Define a PAM provider in Command
+1. In the Keyfactor Command Portal, hover over the ⚙️  (settings) icon in the top right corner of the screen and select **Priviledged Access Management**.
+
+2. Select the **Add** button to create a new PAM provider. Click the dropdown for **Provider Type** and select **Hashicorp-Vault**.
+
+> [!IMPORTANT]
+> If you're running Keyfactor Command 11+, make sure `Remote Provider` is unchecked.
+
+3. Populate the fields with the necessary information collected in the [requirements](docs/hashicorp-vault.md#requirements) section:
+
+| Initialization parameter | Display Name | Description |
+| --- | --- | --- |
+| Host | Vault Host | No description found |
+| Token | Vault Token | No description found |
+| Path | KV Engine Path | No description found |
+
+
+4. Click **Save**. The PAM provider is now available for use in Keyfactor Command.
+
+##### Using the PAM provider
+
+Now, when defining Certificate Stores (**Locations**->**Certificate Stores**), **Hashicorp-Vault** will be available as a PAM provider option. When defining new Certificate Stores, the secret parameter form will display tabs for **Load From Keyfactor Secrets** or **Load From PAM Provider**. 
+
+Select the **Load From PAM Provider** tab, choose the **Hashicorp-Vault** provider from the list of **Providers**, and populate the fields with the necessary information from the table below:
+
+| Instance parameter | Display Name | Description |
+| --- | --- | --- |
+| Secret | KV Secret Name | No description found |
+| Key | KV Secret Key | No description found |
+
+
+
 
 
 #### From a Universal Orchestrator Host (Remote)
 
 
-("TODO Orchestrator Usage is an optional section. If this section doesn't seem necessary on initial glance, please delete it. Refer to the docs on [Confluence](https://keyfactor.atlassian.net/wiki/x/SAAyHg) for more info",)
+
+<details><summary>Keyfactor Command 11+</summary>
+
+##### Define a remote PAM provider in Command
+
+In Command 11 and greater, before using the Hashicorp-Vault PAM type, you must define a Remote PAM Provider in the Command portal.
+
+1. In the Keyfactor Command Portal, hover over the ⚙️  (settings) icon in the top right corner of the screen and select **Priviledged Access Management**.
+
+2. Select the **Add** button to create a new PAM provider.
+
+3. Make sure that `Remote Provider` is checked.
+
+4. Click the dropdown for **Provider Type** and select **Hashicorp-Vault**. 
+
+5. Give the provider a unique name.
+
+6. Click "Save".
+
+##### Using the PAM provider
+
+When defining Certificate Stores (**Locations**->**Certificate Stores**), **Hashicorp-Vault** can be used as a PAM provider. When defining a new Certificate Store, the secret parameter form will display tabs for **Load From Keyfactor Secrets** or **Load From PAM Provider**.
+
+Select the **Load From PAM Provider** tab, choose the **Hashicorp-Vault** provider from the list of **Providers**, and populate the fields with the necessary information from the table below:
+
+| Instance parameter | Display Name | Description |
+| --- | --- | --- |
+| Secret | KV Secret Name | No description found |
+| Key | KV Secret Key | No description found |
+
+
+</details>
+
+<details><summary>Keyfactor Command 10</summary>
+
+When defining Certificate Stores (**Locations**->**Certificate Stores**), **Hashicorp-Vault** can be used as a PAM provider.
+
+When entering Secret fields, select the **Load From Keyfactor Secrets** tab, and populate the **Secret Value** field with the following JSON object:
+
+```json
+{"Secret": "No description found","Key": "No description found"}
+
+```
+
+> We recommend creating this JSON object in a text editor, and copying it into the Secret Value field.
+
+</details>
+
+
 
 
 
