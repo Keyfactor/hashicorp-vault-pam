@@ -144,31 +144,36 @@ Below is the payload to `POST` to the Keyfactor Command API
             "Name": "Host",
             "DisplayName": "Vault Host",
             "DataType": 1,
-            "InstanceLevel": false
+            "InstanceLevel": false,
+            "Description": "The IP address or URL of the Vault instance, including any port number"
         },
         {
             "Name": "Token",
             "DisplayName": "Vault Token",
             "DataType": 2,
-            "InstanceLevel": false
+            "InstanceLevel": false,
+            "Description": "The access token for the Vault. For token auth only. Not needed for Kerberos auth."
         },
         {
             "Name": "Path",
             "DisplayName": "KV Engine Path",
             "DataType": 1,
-            "InstanceLevel": false
+            "InstanceLevel": false,
+            "Description": "The path to secrets in the Vault. By default this would be at 'v1/secret/data'. The full form of this paramater is 'v1/{namespace}/{kv secrets engine name}/data'."
         },
         {
             "Name": "Secret",
             "DisplayName": "KV Secret Name",
             "DataType": 1,
-            "InstanceLevel": true
+            "InstanceLevel": true,
+            "Description": "The name of the secret in the Vault"
         },
         {
             "Name": "Key",
             "DisplayName": "KV Secret Key",
             "DataType": 1,
-            "InstanceLevel": true
+            "InstanceLevel": true,
+            "Description": "The key to the key-value pair of the secret to access"
         }
     ]
 }
@@ -297,9 +302,9 @@ Below is the payload to `POST` to the Keyfactor Command API
 
 | Initialization parameter | Display Name | Description |
 | --- | --- | --- |
-| Host | Vault Host | No description found |
-| Token | Vault Token | No description found |
-| Path | KV Engine Path | No description found |
+| Host | Vault Host | The IP address or URL of the Vault instance, including any port number |
+| Token | Vault Token | The access token for the Vault. For token auth only. Not needed for Kerberos auth. |
+| Path | KV Engine Path | The path to secrets in the Vault. By default this would be at 'v1/secret/data'. The full form of this paramater is 'v1/{namespace}/{kv secrets engine name}/data'. |
 
 
 4. Click **Save**. The PAM provider is now available for use in Keyfactor Command.
@@ -312,8 +317,8 @@ Select the **Load From PAM Provider** tab, choose the **Hashicorp-Vault** provid
 
 | Instance parameter | Display Name | Description |
 | --- | --- | --- |
-| Secret | KV Secret Name | No description found |
-| Key | KV Secret Key | No description found |
+| Secret | KV Secret Name | The name of the secret in the Vault |
+| Key | KV Secret Key | The key to the key-value pair of the secret to access |
 
 
 
@@ -349,8 +354,8 @@ Select the **Load From PAM Provider** tab, choose the **Hashicorp-Vault** provid
 
 | Instance parameter | Display Name | Description |
 | --- | --- | --- |
-| Secret | KV Secret Name | No description found |
-| Key | KV Secret Key | No description found |
+| Secret | KV Secret Name | The name of the secret in the Vault |
+| Key | KV Secret Key | The key to the key-value pair of the secret to access |
 
 
 </details>
@@ -362,7 +367,7 @@ When defining Certificate Stores (**Locations**->**Certificate Stores**), **Hash
 When entering Secret fields, select the **Load From Keyfactor Secrets** tab, and populate the **Secret Value** field with the following JSON object:
 
 ```json
-{"Secret": "No description found","Key": "No description found"}
+{"Secret": "The name of the secret in the Vault","Key": "The key to the key-value pair of the secret to access"}
 
 ```
 
