@@ -1,72 +1,51 @@
+<h1 align="center" style="border-bottom: none">
+    Hashicorp Vault PAM Provider
+</h1>
 
-# Hashicorp Vault PAM Provider
+<p align="center">
+  <!-- Badges -->
+<img src="https://img.shields.io/badge/integration_status-production-3D1973?style=flat-square" alt="Integration Status: production" />
+<a href="https://github.com/Keyfactor/hashicorp-vault-pam/releases"><img src="https://img.shields.io/github/v/release/Keyfactor/hashicorp-vault-pam?style=flat-square" alt="Release" /></a>
+<img src="https://img.shields.io/github/issues/Keyfactor/hashicorp-vault-pam?style=flat-square" alt="Issues" />
+<img src="https://img.shields.io/github/downloads/Keyfactor/hashicorp-vault-pam/total?style=flat-square&label=downloads&color=28B905" alt="GitHub Downloads (all assets, all releases)" />
+</p>
+
+<p align="center">
+  <!-- TOC -->
+  <a href="#support">
+    <b>Support</b>
+  </a> 
+  ·
+  <a href="#getting-started">
+    <b>Installation</b>
+  </a>
+  ·
+  <a href="#license">
+    <b>License</b>
+  </a>
+  ·
+  <a href="https://github.com/orgs/Keyfactor/repositories?q=pam">
+    <b>Related Integrations</b>
+  </a>
+</p>
+
+## Overview
 
 The Hashicorp Vault PAM Provider allows for the retrieval of stored account credentials from a Hashicorp Vault Secret store. A valid token with access to the secrets in the Vault is used to retrieve secrets from a specific secret path in the Vault.
 
-#### Integration status: Production - Ready for use in production environments.
-
-## About the Keyfactor PAM Provider
-
-Keyfactor supports the retrieval of credentials from 3rd party Privileged Access Management (PAM) solutions. Secret values can normally be stored, encrypted at rest, in the Keyfactor Platform database. A PAM Provider can allow these secrets to be stored, managed, and rotated in an external platform. This integration is usually configured on the Keyfactor Platform itself, where the platform can request the credential values when needed. In certain scenarios, a PAM Provider can instead be run on a remote location in conjunction with a Keyfactor Orchestrator to allow credential requests to originate from a location other than the Keyfactor Platform.
-
-## Support for Hashicorp Vault PAM Provider
-
-Hashicorp Vault PAM Provider is supported by Keyfactor for Keyfactor customers. If you have a support issue, please open a support ticket via the Keyfactor Support Portal at https://support.keyfactor.com
-
-###### To report a problem or suggest a new feature, use the **[Issues](../../issues)** tab. If you want to contribute actual bug fixes or proposed enhancements, use the **[Pull requests](../../pulls)** tab.
-
----
-
-#### Compatibility
+## Requirements
 This release requires Keyfactor version 9.10 or greater.
 This release was tested against Hashicorp Vault version 1.9.4.
 Using this on a Universal Orchestrator requires UO version 10.1 or greater.
----
 
+## Installation and Configuration
 
-
-
-### Initial Configuration of PAM Provider
-In order to allow Keyfactor to use the new Hashicorp Vault PAM Provider, the definition needs to be added to the application database.
-This is done by running the provided `kfutil` tool to install the PAM definition, which only needs to be done one time. It uses API credentials to access the Keyfactor instance and create the PAM definition.
-
-The `kfutil` tool, after being [configured for API access](https://github.com/Keyfactor/kfutil#quickstart), can be run in the following manner to install the PAM definition from the Keyfactor repository:
-
-```
-kfutil pam types-create -r hashicorp-vault-pam -n Hashicorp-Vault
-```
-
-### Configuring Parameters
-The following are the parameter names and a description of the values needed to configure the Hashicorp Vault PAM Provider.
-
-Note that the `Path` Initialization Paramater is used to support Enterprise Namespaces when the Vault secrets fall under a namespace.
-
-__Initialization Parameters for each defined PAM Provider instance__
-| Initialization parameter | Display Name | Description |
-| :---: | :---: | --- |
-| Host | Vault Host | The IP address or URL of the Vault instance, including any port number |
-| Token* | Vault Token | The access token for the Vault.   *For token auth only.  Not needed for Kerberos auth.|
-| Path | KV Engine Path | The path to secrets in the Vault. By default this would be at 'v1/secret/data'. The full form of this paramater is 'v1/{namespace}/{kv secrets engine name}/data'. |
-
-For Enterprise Namespace support, as mentioned above, the `Path` parameter is used to enter the namespace to be used. For example, if a new `kv` secrets engine was created named "keyfactor-secrets", the `Path` parameter would have a value 'v1/keyfactor-secrets/data'. If this `kv` secrets engine was under the namespace "Operations", the full `Path` parameter would be 'v1/Operations/keyfactor-secrets/data'.
-
-
-__Instance Parameters for each retrieved secret field__
-| Instance parameter | Display Name | Description |
-| :---: | :---: | --- |
-| Secret | KV Secret Name | The name of the secret in the Vault |
-| Key | KV Secret Key | The key to the key-value pair of the secret to access |
-
-![](images/config.png)
-
-### Configuring for PAM Usage
 #### In Hashicorp Vault
 When configuring the Hashicorp Vault for use as a PAM Provider with Keyfactor, you will need to set up and configure the `kv` functionality in Vault. You will need an API Key that has the right permissions. The default `secret` location can be used, or another location.
 
 After adding a secret object to `kv` with a key and value, you can use the object's name (the "KV Secret Name") and the secret's key (the "KV Secret Key") to retrieve credentials from the Hashicorp Vault as a PAM Provider.
 
-#### On Keyfactor Universal Orchestrator
-##### Installation
+#### On the Universal Orchestrator
 Configuring the UO to use the Hashicorp Vault PAM Provider requries first installing it as an extension by copying the release contents into a new extension folder named `Hashicorp-Vault`.
 A `manifest.json` file is included in the release. This file needs to be edited to enter in the "initialization" parameters for the PAM Provider. Specifically values need to be entered for the parameters in the `manifest.json` of the __PAM Provider extension__:
 
@@ -82,7 +61,7 @@ Two other versions of the `manifest.json` are also included - `manifestTokenAuth
 
 Please refer to the following "Kerberos Authentication" section later in this README for more information on setting up the Hashicorp Vault PAM Provider to use Kerberos Authentication.
 
-##### Usage
+## Usage
 To use the PAM Provider to resolve a field, for example a Server Password, instead of entering in the actual value for the Server Password, enter a `json` object with the parameters specifying the field.
 The parameters needed are the "instance" parameters above:
 
@@ -92,7 +71,7 @@ The parameters needed are the "instance" parameters above:
 
 If a field supports PAM but should not use PAM, simply enter in the actual value to be used instead of the `json` format object above.
 
-##### Kerberos Authentication
+## Kerberos Authentication
 As mentioned earlier, by default the Hashicorp Vault PAM Provider authenticates to your Hashicorp Vault instance using token authentication.  An alternative method of authentication is available - Kerberos.  This method allows authentication via the credentials of the security context running the Hashicorp Vault PAM Provider.  A call is made to the Hashicorp Vault instance using the already authenticated Kerberos token and a separate Hashicorp Vault token is returned which is used for the remainder of the session.
 
 There is a considerable amount of set up that needs to be performed before kerberos authentication will work with the Hashicorp Vault PAM Provider.  Setting up an environment that can use this alternative authentication is out of scope for this integration, but below are the steps that were successfully performed for testing on a Windows based implementation.  Your configuration steps will likely be different.  For the steps below, all values that should be replaced with your own settings are surrounded by single curly braces - {value}.  Please note, in step 7 below, the "{{.UserDN}}" value shown **is** a literal.
@@ -111,48 +90,137 @@ There is a considerable amount of set up that needs to be performed before kerbe
 
 A more generic reference for the necessary configuration can be found at https://developer.hashicorp.com/vault/docs/auth/kerberos.
 
-#### In Keyfactor - PAM Provider
-##### Installation
-In order to setup a new PAM Provider in the Keyfactor Platform for the first time, you will need to run the `kfutil` tool (see Initial Configuration of PAM Provider).
+## Support
+The Hashicorp Vault PAM Provider is supported by Keyfactor for Keyfactor customers. If you have a support issue, please open a support ticket with your Keyfactor representative. If you have a support issue, please open a support ticket via the Keyfactor Support Portal at https://support.keyfactor.com. 
 
-After the installation is run, the DLLs need to be installed to the correct location for the PAM Provider to function. From the release, the hashicorp-vault-pam.dll should be copied to the following folder locations in the Keyfactor installation. Once the DLL has been copied to these folders, edit the corresponding config file. You will need to add a new Unity entry as follows under `<container>`, next to other `<register>` tags.
+> To report a problem or suggest a new feature, use the **[Issues](../../issues)** tab. If you want to contribute actual bug fixes or proposed enhancements, use the **[Pull requests](../../pulls)** tab.
 
-| Install Location | DLL Binary Folder | Config File |
-| --- | --- | --- |
-| WebAgentServices | WebAgentServices\bin\ | WebAgentServices\web.config |
-| Service | Service\ | Service\CMSTimerService.exe.config |
-| KeyfactorAPI | KeyfactorAPI\bin\ | KeyfactorAPI\web.config |
-| WebConsole | WebConsole\bin\ | WebConsole\web.config |
+## Getting Started
 
-When enabling a PAM provider for Orchestrators only, the first line for `WebAgentServices` is the only installation needed.
+The Hashicorp Vault PAM Provider is used by Command to resolve PAM-eligible credentials for Universal Orchestrator extensions and for accessing Certificate Authorities. When configured, Command will use the Hashicorp Vault PAM Provider to retrieve credentials needed to communicate with the target system. There are two ways to install the Hashicorp Vault PAM Provider, and you may elect to use one or both methods:
 
-The Keyfactor service and IIS Server should be restarted after making these changes.
+1. **Locally on the Keyfactor Command server**: PAM credential resolution via the Hashicorp Vault PAM Provider will occur on the Keyfactor Command server each time an elegible credential is needed.
+2. **Remotely On Universal Orchestrators**: When Jobs are dispatched to Universal Orchestrators, the associated Certificate Store extension assembly will use the Hashicorp Vault PAM Provider to resolve eligible PAM credentials.
 
-```xml
-<register type="IPAMProvider" mapTo="Keyfactor.Extensions.Pam.Hashicorp.VaultPAM, hashicorp-vault-pam" name="Hashicorp-Vault" />
+Before proceeding with installation, you should consider which pattern is best for your requirements and use case.
+
+### Installation
+
+> [!IMPORTANT]
+> For the most up-to-date and complete documentation on how to install a PAM provider extension, please visit our [product documentation](https://software.keyfactor.com/Core-OnPrem/Current/Content/ReferenceGuide/Preparing%20Third%20Party%20PAM%20Providers%20to%20Work%20with.htm?Highlight=pam%20provider#InstallingCustomPAMProviderExtensions)
+
+
+To install Hashicorp Vault PAM Provider, it is recommended you install [kfutil](https://github.com/Keyfactor/kfutil). `kfutil` is a command-line tool that simplifies the process of creating PAM Types in Keyfactor Command.
+
+
+
+
+
+
+
+#### Requirements
+   TODO Requirements is a required section
+
+#### Create PAM type in Keyfactor Command
+
+
+##### Using `kfutil`
+Create the required PAM Types in the connected Command platform.
+
+```shell
+# Hashicorp-Vault
+kfutil pam types-create -r hashicorp-vault-pam -n Hashicorp-Vault
 ```
 
+##### Using the API
+For full API docs please visit our [product documentation](https://software.keyfactor.com/Core-OnPrem/Current/Content/WebAPI/KeyfactorAPI/PAMProvidersPOSTTypes.htm?Highlight=pam%20type)
 
-
-For registering the Hashicorp Vault PAM Provider using Kerberos Auth, use the following `<register>` instead.
-
-```xml
-<register type="IPAMProvider" mapTo="Keyfactor.Extensions.Pam.Hashicorp.VaultPAMKerberos, hashicorp-vault-pam" name="Hashicorp-Vault" />
+Below is the payload to `POST` to the Keyfactor Command API
+```json
+{
+    "Name": "Hashicorp-Vault",
+    "Parameters": [
+        {
+            "Name": "Host",
+            "DisplayName": "Vault Host",
+            "DataType": 1,
+            "InstanceLevel": false
+        },
+        {
+            "Name": "Token",
+            "DisplayName": "Vault Token",
+            "DataType": 2,
+            "InstanceLevel": false
+        },
+        {
+            "Name": "Path",
+            "DisplayName": "KV Engine Path",
+            "DataType": 1,
+            "InstanceLevel": false
+        },
+        {
+            "Name": "Secret",
+            "DisplayName": "KV Secret Name",
+            "DataType": 1,
+            "InstanceLevel": true
+        },
+        {
+            "Name": "Key",
+            "DisplayName": "KV Secret Key",
+            "DataType": 1,
+            "InstanceLevel": true
+        }
+    ]
+}
 ```
 
-##### Usage
-In order to use the PAM Provider, the provider's configuration must be set in the Keyfactor Platform. In the settings menu (upper right cog) you can select the ___Priviledged Access Management___ option to configure your provider instance.
-
-![](images/setting.png)
-
-After it is set up, you can now use your PAM Provider when configuring certificate stores. Any field that is treated as a Keyfactor secret, such as server passwords and certificate store passwords can be retrieved from your PAM Provider instead of being entered in directly as a secret.
-
-![](images/password.png)
+#### Install PAM provider on Keyfactor Command Host (Local)
 
 
----
+("TODO Platform Install is an optional section. If this section doesn't seem necessary on initial glance, please delete it. Refer to the docs on [Confluence](https://keyfactor.atlassian.net/wiki/x/SAAyHg) for more info",)
 
+
+#### Install PAM provider on a Universal Orchestrator Host (Remote)
+
+
+("TODO Orchestrator Install is an optional section. If this section doesn't seem necessary on initial glance, please delete it. Refer to the docs on [Confluence](https://keyfactor.atlassian.net/wiki/x/SAAyHg) for more info",)
 
 
 
 
+
+
+
+### Usage
+
+
+
+
+
+
+#### From Keyfactor Command Host (Local)
+
+
+("TODO Platform Usage is an optional section. If this section doesn't seem necessary on initial glance, please delete it. Refer to the docs on [Confluence](https://keyfactor.atlassian.net/wiki/x/SAAyHg) for more info",)
+
+
+#### From a Universal Orchestrator Host (Remote)
+
+
+("TODO Orchestrator Usage is an optional section. If this section doesn't seem necessary on initial glance, please delete it. Refer to the docs on [Confluence](https://keyfactor.atlassian.net/wiki/x/SAAyHg) for more info",)
+
+
+
+
+> [!NOTE]
+> Additional information on Hashicorp-Vault can be found in the [supplemental documentation](docs/hashicorp-vault.md).
+
+
+
+## License
+
+Apache License 2.0, see [LICENSE](LICENSE)
+
+## Related Integrations
+
+See all [Keyfactor PAM Provider extensions](https://github.com/orgs/Keyfactor/repositories?q=pam).
