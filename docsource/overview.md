@@ -1,11 +1,14 @@
-### Configuring for PAM Usage
+## Overview
+
+The Hashicorp Vault PAM Provider allows for the retrieval of stored account credentials from a Hashicorp Vault Secret store. A valid token with access to the secrets in the Vault is used to retrieve secrets from a specific secret path in the Vault.
+
+## Installation and Configuration
 #### In Hashicorp Vault
 When configuring the Hashicorp Vault for use as a PAM Provider with Keyfactor, you will need to set up and configure the `kv` functionality in Vault. You will need an API Key that has the right permissions. The default `secret` location can be used, or another location.
 
 After adding a secret object to `kv` with a key and value, you can use the object's name (the "KV Secret Name") and the secret's key (the "KV Secret Key") to retrieve credentials from the Hashicorp Vault as a PAM Provider.
 
-#### On Keyfactor Universal Orchestrator
-##### Installation
+#### On the Universal Orchestrator
 Configuring the UO to use the Hashicorp Vault PAM Provider requries first installing it as an extension by copying the release contents into a new extension folder named `Hashicorp-Vault`.
 A `manifest.json` file is included in the release. This file needs to be edited to enter in the "initialization" parameters for the PAM Provider. Specifically values need to be entered for the parameters in the `manifest.json` of the __PAM Provider extension__:
 
@@ -21,7 +24,7 @@ Two other versions of the `manifest.json` are also included - `manifestTokenAuth
 
 Please refer to the following "Kerberos Authentication" section later in this README for more information on setting up the Hashicorp Vault PAM Provider to use Kerberos Authentication.
 
-##### Usage
+## Usage
 To use the PAM Provider to resolve a field, for example a Server Password, instead of entering in the actual value for the Server Password, enter a `json` object with the parameters specifying the field.
 The parameters needed are the "instance" parameters above:
 
@@ -31,7 +34,7 @@ The parameters needed are the "instance" parameters above:
 
 If a field supports PAM but should not use PAM, simply enter in the actual value to be used instead of the `json` format object above.
 
-##### Kerberos Authentication
+## Kerberos Authentication
 As mentioned earlier, by default the Hashicorp Vault PAM Provider authenticates to your Hashicorp Vault instance using token authentication.  An alternative method of authentication is available - Kerberos.  This method allows authentication via the credentials of the security context running the Hashicorp Vault PAM Provider.  A call is made to the Hashicorp Vault instance using the already authenticated Kerberos token and a separate Hashicorp Vault token is returned which is used for the remainder of the session.
 
 There is a considerable amount of set up that needs to be performed before kerberos authentication will work with the Hashicorp Vault PAM Provider.  Setting up an environment that can use this alternative authentication is out of scope for this integration, but below are the steps that were successfully performed for testing on a Windows based implementation.  Your configuration steps will likely be different.  For the steps below, all values that should be replaced with your own settings are surrounded by single curly braces - {value}.  Please note, in step 7 below, the "{{'{{'}}.UserDN}}" value shown **is** a literal.
