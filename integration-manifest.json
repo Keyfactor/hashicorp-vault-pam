@@ -6,8 +6,8 @@
   "support_level": "kf-supported",
   "update_catalog": true,
   "link_github": true,
-  "release_dir": "hashicorp-vault-pam/bin/Release/netstandard2.0",
-  "release_project": "hashicorp-vault-pam/hashicorp-vault-pam.csproj"
+  "release_dir": "hashicorp-vault-pam/bin/Release",
+  "release_project": "hashicorp-vault-pam/hashicorp-vault-pam.csproj",
   "description": "The Hashicorp Vault PAM Provider allows for the retrieval of stored account credentials from a Hashicorp Vault Secret store. A valid token with access to the secrets in the Vault is used to retrieve secrets from a specific secret path in the Vault.",
   "about": {
     "pam": {
@@ -23,31 +23,36 @@
               "Name": "Host",
               "DisplayName": "Vault Host",
               "DataType": 1,
-              "InstanceLevel": false
+              "InstanceLevel": false,
+              "Description": "The IP address or URL of the Vault instance, including any port number"
             },
             {
               "Name": "Token",
               "DisplayName": "Vault Token",
               "DataType": 2,
-              "InstanceLevel": false
+              "InstanceLevel": false,
+              "Description": "The access token for the Vault. For token auth only. Not needed for Kerberos auth."
             },
             {
               "Name": "Path",
               "DisplayName": "KV Engine Path",
               "DataType": 1,
-              "InstanceLevel": false
+              "InstanceLevel": false,
+              "Description": "The path to secrets in the Vault. By default this would be at 'v1/secret/data'. The full form of this paramater is 'v1/{namespace}/{kv secrets engine name}/data'."
             },
             {
               "Name": "Secret",
               "DisplayName": "KV Secret Name",
               "DataType": 1,
-              "InstanceLevel": true
+              "InstanceLevel": true,
+              "Description": "The name of the secret in the Vault"
             },
             {
               "Name": "Key",
               "DisplayName": "KV Secret Key",
               "DataType": 1,
-              "InstanceLevel": true
+              "InstanceLevel": true,
+              "Description": "The key to the key-value pair of the secret to access"
             }
           ]
         }
